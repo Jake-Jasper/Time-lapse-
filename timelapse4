@@ -1,0 +1,49 @@
+import picamera
+#from picamera import PiCamera as camera
+import os
+import time
+import testing_lights as lights
+from time import sleep
+import datetime
+from fractions import Fraction
+
+save_location = "/media/pi/Lexar/Test Location"
+os.chdir(save_location)
+
+
+
+def time_lapse():
+	
+	lights.lights_on()
+	camera = picamera.PiCamera()
+	camera.resolution = (3280 , 2464)
+	# Set ISO to the desired value
+	camera.iso = 200
+	camera.brightness = 55
+	# Wait for the automatic gain control to settle
+	sleep(5)
+	# Now fix the values
+	camera.shutter_speed = camera.exposure_speed
+	camera.exposure_mode = 'off'
+	#g = camera.awb_gains  # (Fraction(39, 32), Fraction(789, 256))
+	camera.awb_mode = 'off'
+	camera.awb_gains = (Fraction(39, 32), Fraction(789, 256))
+	time.sleep(20)
+	
+	
+	name = time.time()
+	
+	output = "{}.jpg".format(name)
+	
+	print(output)
+	camera.capture(output = output, quality = 100)
+
+	lights.lights_off()
+	camera.close()
+	#print(g)
+	
+	time.sleep(10)
+
+
+while True:
+	time_lapse()
