@@ -2,7 +2,7 @@
 
 import skimage
 from skimage.io import imread
-from skimage.filters import threshold_otsu
+from skimage.filters import threshold_otsu, sobel, gaussian
 from skimage.segmentation import clear_border, watershed
 from skimage.color import rgb2hsv, hsv2rgb
 from skimage.measure import label, regionprops
