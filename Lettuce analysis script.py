@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 from scipy.signal import find_peaks
 
-image = imread('Trial 6 early lettuce-correct.jpg')
+image = imread(files[0])
 
 def get_parameters(h):
     ''' Takes 2d image and returns peak parameters
@@ -23,7 +23,7 @@ def get_parameters(h):
     # Having a relativley small number of bins makes it easier to find distributions
     bins = 50
     #halves the peak so we don't get noisy edges
-    trim_factor = 2
+    trim_factor = 1.6
     # find the peaks
     hist, bin_edges = np.histogram(h,bins)
     
@@ -66,5 +66,27 @@ def get_leaves(image):
 
     return image_c 
 
+# Some images are noisy around the edges this helps..
+
+def get_leaves_lettuce(image):
+    ''' Only diff between this and Rocket is the #2 edge size'''
+    hsv = rgb2hsv(image)
+    s = hsv[:,:,1]
+    sobel_edge = sobel(gaussian(s, 4))
     
-plt.imshow(get_leaves(image))
+    markers = np.zeros_like(sobel_edge)
+
+    markers[sobel_edge < 0.0000001] = 1 #green
+    markers[sobel_edge > 0.001] = 2 # edges white 0.004 for lettuce
+    
+    segmented = watershed(sobel_edge, markers)
+    # not sure what this does
+    segmented = ndi.binary_fill_holes(segmented - 1)
+    copied_image = np.copy(image)
+    mask = skimage.morphology.remove_small_objects(segmented, 100000)
+    copied_image[~mask] = [0,0,0]
+    
+    return copied_image
+
+new_image = get_leaves(image)    
+plt.imshow(get_leaves_lettuce(new_image))    
