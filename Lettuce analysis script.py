@@ -67,7 +67,7 @@ def get_parameters(h):
     bins = 50
     #trims the peak so we don't get noisy edges, this is a nice balance, but 2 works best from most images
     #however, it cuts off some images too much.
-    trim_factor = 1.6
+    trim_factor = 1.9
     # find the peaks
     hist, bin_edges = np.histogram(h,bins)
     
