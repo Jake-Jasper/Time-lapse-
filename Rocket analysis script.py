@@ -83,7 +83,10 @@ def get_leaves_rocket(image):
     markers = np.zeros_like(sobel_edge)
 
     markers[sobel_edge < 0.0000001] = 1 #green
-    markers[sobel_edge > 0.0037] = 2 # edges white 0.004 with bins = 10
+    markers[sobel_edge > 0.0037] = 2 # edges white 0.004 with bins = 10 # This also needs tuning, add zeroes
+                                                                         # if too much is missing, 
+                                                                         #take away 0 if too messy etc
+    
     
     segmented = watershed(sobel_edge, markers)
     # not sure what this does
