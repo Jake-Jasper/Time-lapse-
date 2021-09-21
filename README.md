@@ -2,4 +2,4 @@
 My script for the pi camera and analysis of images.
 
 
-For colour histograms use mapinpulating colour.
+For colour histograms use manipulating colour.
